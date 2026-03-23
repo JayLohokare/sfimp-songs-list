@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { index: 7, name: 'Guitar 1' },
             { index: 8, name: 'Guitar 2' },
             { index: 9, name: 'Acoustic Guitar' },
-            { index: 10, name: 'Bass' }
+            { index: 10, name: 'Bass' },
+            { index: 11, name: 'Others' }
         ];
 
         for (let i = 1; i < rows.length; i++) {
