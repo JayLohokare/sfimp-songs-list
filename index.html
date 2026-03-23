@@ -6,23 +6,24 @@
     <title>SFIMP Jam Dashboard</title>
     <!-- Use relative paths for GitHub Pages -->
     <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="setup-modal" class="modal active">
-        <div class="modal-content glass-panel">
+    <div id="setup-modal" class="modal">
+        <div class="modal-content solid-card">
             <h2>Dashboard Setup</h2>
             <p>Enter the Google Sheets API Key and Sheet ID to connect.</p>
             <input type="text" id="api-key-input" placeholder="Google API Key">
-            <input type="text" id="sheet-id-input" placeholder="Sheet ID (from URL)">
-            <button id="save-setup-btn">Connect</button>
+            <input type="text" id="sheet-id-input" placeholder="Sheet ID">
+            <button id="save-setup-btn" class="button-primary">Connect</button>
             <p id="setup-error" class="error-msg"></p>
         </div>
     </div>
 
     <header class="top-bar">
         <div class="logo-container">
-            <img src="./logo.png" alt="SFIMP Logo" class="logo">
+            <!-- Emulating the clean text header of the official site -->
+            <h2 class="brand-text">SAN FRANCISCO INDIAN MUSIC PROJECT</h2>
         </div>
         <div class="clock-container">
             <span id="current-time">--:-- -- PT</span>
@@ -30,35 +31,42 @@
     </header>
 
     <main class="dashboard is-loading" id="main-dashboard">
-        <!-- Next Song Preview -->
-        <div class="next-song-card glass-panel">
-            <h3>Next Up</h3>
-            <p id="next-song-title">Loading...</p>
-        </div>
-
         <!-- Main Current Song -->
-        <div class="current-song-card glass-panel main-glass">
-            <h1 id="current-song-title">Loading...</h1>
-            <div class="song-meta">
-                <span id="current-time-block" class="time-badge">--:--</span>
-                <span id="current-song-index" class="index-badge">#-</span>
+        <div class="current-song-card solid-card card-accent">
+            <div class="card-header">
+                <span class="badge badge-orange">LIVE JAM</span>
+                <span id="current-song-index" class="badge badge-light">#-</span>
             </div>
             
+            <h1 id="current-song-title">Loading...</h1>
+            <div class="song-meta">
+                <span class="meta-icon">📍</span> <span id="current-time-block">--:-- PT</span>
+            </div>
+            
+            <p class="section-label">Musicians</p>
             <div class="participants-grid" id="participants-list">
                 <!-- Javascript will inject participants here -->
             </div>
         </div>
 
-        <!-- Navigation Controls -->
-        <div class="controls glass-panel">
-            <button id="prev-btn" class="nav-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                Previous
-            </button>
-            <button id="next-btn" class="nav-btn">
-                Next
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+        <!-- Next Song Preview -->
+        <div class="next-song-container">
+            <div class="next-song-card solid-card">
+                <h3>Next Up</h3>
+                <p id="next-song-title">Loading...</p>
+            </div>
+            
+            <!-- Navigation Controls -->
+            <div class="controls">
+                <button id="prev-btn" class="nav-btn button-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                    Previous
+                </button>
+                <button id="next-btn" class="nav-btn button-primary">
+                    Next
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
         </div>
     </main>
     <script src="./app.js"></script>
