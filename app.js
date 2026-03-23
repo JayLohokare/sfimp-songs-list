@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const next = songsData[currentSongIndex + 1];
             nextSongTitle.textContent = next.title;
             if (next.participants && next.participants.length > 0) {
-                nextSongParticipants.innerHTML = next.participants.map(p => `${p.name} <span style="opacity:0.6;font-size:0.8em">(${p.role})</span>`).join(' &bull; ');
+                nextSongParticipants.innerHTML = next.participants.map(p => `<div class="participant-pill"><span class="pill-role">${p.role}</span> ${p.name}</div>`).join('');
             } else {
                 nextSongParticipants.innerHTML = '';
             }

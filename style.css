@@ -221,12 +221,30 @@ h1, h2, h3, .brand-text {
     font-size: 1.4rem;
     font-weight: 600;
 }
-.next-song-names {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin-top: 6px;
+.next-song-participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+.participant-pill {
+    padding: 4px 12px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 500;
-    line-height: 1.5;
+}
+.pill-role {
+    font-weight: 800;
+    color: var(--accent-orange);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Controls */
