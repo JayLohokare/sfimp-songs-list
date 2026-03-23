@@ -144,10 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!songsData || songsData.length === 0) return;
         
         const song = songsData[currentSongIndex];
+        const currentSlotSongs = songsData.filter(s => s.timeBlock === song.timeBlock);
+        const slotSongIndex = currentSlotSongs.indexOf(song) + 1;
+        const totalInSlot = currentSlotSongs.length;
+        const timeBlockStr = song.timeBlock || 'TBD Time';
         
         currentSongTitle.textContent = song.title;
-        currentTimeBlock.textContent = song.timeBlock || 'TBD Time';
-        currentSongIndexBadge.textContent = 'Song #' + (song.number || (currentSongIndex + 1));
+        currentTimeBlock.textContent = timeBlockStr;
+        currentSongIndexBadge.textContent = `Song ${slotSongIndex} / ${totalInSlot} in ${timeBlockStr} slot`;
         
         participantsList.innerHTML = '';
         song.participants.forEach(p => {
