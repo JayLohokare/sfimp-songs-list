@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFIMP Jam Dashboard</title>
+    <!-- Use relative paths for GitHub Pages -->
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="setup-modal" class="modal active">
+        <div class="modal-content glass-panel">
+            <h2>Dashboard Setup</h2>
+            <p>Enter the Google Sheets API Key and Sheet ID to connect.</p>
+            <input type="text" id="api-key-input" placeholder="Google API Key">
+            <input type="text" id="sheet-id-input" placeholder="Sheet ID (from URL)">
+            <button id="save-setup-btn">Connect</button>
+            <p id="setup-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <header class="top-bar">
+        <div class="logo-container">
+            <img src="./logo.png" alt="SFIMP Logo" class="logo">
+        </div>
+        <div class="clock-container">
+            <span id="current-time">--:-- -- PT</span>
+        </div>
+    </header>
+
+    <main class="dashboard is-loading" id="main-dashboard">
+        <!-- Next Song Preview -->
+        <div class="next-song-card glass-panel">
+            <h3>Next Up</h3>
+            <p id="next-song-title">Loading...</p>
+        </div>
+
+        <!-- Main Current Song -->
+        <div class="current-song-card glass-panel main-glass">
+            <h1 id="current-song-title">Loading...</h1>
+            <div class="song-meta">
+                <span id="current-time-block" class="time-badge">--:--</span>
+                <span id="current-song-index" class="index-badge">#-</span>
+            </div>
+            
+            <div class="participants-grid" id="participants-list">
+                <!-- Javascript will inject participants here -->
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="controls glass-panel">
+            <button id="prev-btn" class="nav-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                Previous
+            </button>
+            <button id="next-btn" class="nav-btn">
+                Next
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+    </main>
+    <script src="./app.js"></script>
+</body>
+</html>
