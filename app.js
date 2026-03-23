@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('setup-modal');
-    const apiKeyInput = document.getElementById('api-key-input');
     const sheetIdInput = document.getElementById('sheet-id-input');
     const saveSetupBtn = document.getElementById('save-setup-btn');
     const setupError = document.getElementById('setup-error');
     const dashboard = document.getElementById('main-dashboard');
+    const resetSheetBtn = document.getElementById('reset-sheet-btn');
     
     // UI Elements
     const timeDisplay = document.getElementById('current-time');
@@ -24,37 +24,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let songsData = [];
     let currentSongIndex = 0;
 
-    // Default Credentials provided by User
     const DEFAULT_API_KEY = 'AIzaSyBjsGXUIx6AtPhdQZbIgA91caX4hiwvsc0';
-    const DEFAULT_SHEET_ID = '1k4K0GZVevtR5LLULmBZhD9g_nQ0WcB_C-jkaS3Baf0U';
+    const savedSheetId = localStorage.getItem('sfimpSheetId');
 
-    // Check localStorage or use defaults
-    const savedApiKey = localStorage.getItem('sfimpApiKey') || DEFAULT_API_KEY;
-    const savedSheetId = localStorage.getItem('sfimpSheetId') || DEFAULT_SHEET_ID;
-
-    apiKeyInput.value = savedApiKey;
-    sheetIdInput.value = savedSheetId;
-    
-    // Automatically fetch on load
-    fetchSheetData(savedApiKey, savedSheetId);
+    if (savedSheetId) {
+        sheetIdInput.value = savedSheetId;
+        fetchSheetData(DEFAULT_API_KEY, savedSheetId);
+    } else {
+        modal.classList.add('active');
+        dashboard.classList.add('is-loading');
+    }
 
     saveSetupBtn.addEventListener('click', () => {
-        const apiKey = apiKeyInput.value.trim();
         const sheetId = sheetIdInput.value.trim();
         
-        if (!apiKey || !sheetId) {
-            setupError.textContent = "Please provide both API Key and Sheet ID.";
+        if (!sheetId) {
+            setupError.textContent = "Please provide a Sheet ID or URL.";
             setupError.style.display = "block";
             return;
         }
 
         setupError.style.display = "none";
-        saveSetupBtn.textContent = "Connecting...";
+        saveSetupBtn.textContent = "Loading...";
         
-        localStorage.setItem('sfimpApiKey', apiKey);
         localStorage.setItem('sfimpSheetId', sheetId);
-        
-        fetchSheetData(apiKey, sheetId);
+        fetchSheetData(DEFAULT_API_KEY, sheetId);
+    });
+
+    resetSheetBtn.addEventListener('click', () => {
+        localStorage.removeItem('sfimpSheetId');
+        location.reload();
     });
 
     function cleanSheetId(input) {

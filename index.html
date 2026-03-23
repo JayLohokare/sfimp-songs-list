@@ -11,11 +11,10 @@
 <body>
     <div id="setup-modal" class="modal">
         <div class="modal-content solid-card">
-            <h2>Dashboard Setup</h2>
-            <p>Enter the Google Sheets API Key and Sheet ID to connect.</p>
-            <input type="text" id="api-key-input" placeholder="Google API Key">
-            <input type="text" id="sheet-id-input" placeholder="Sheet ID">
-            <button id="save-setup-btn" class="button-primary">Connect</button>
+            <h2>Connect Spreadsheet</h2>
+            <p>Enter your Google Sheet ID or link to load the jam session.</p>
+            <input type="text" id="sheet-id-input" placeholder="e.g., 1k4K0GZV... or full URL">
+            <button id="save-setup-btn" class="button-primary">Load Dashboard</button>
             <p id="setup-error" class="error-msg"></p>
         </div>
     </div>
@@ -25,8 +24,11 @@
             <!-- Emulating the clean text header of the official site -->
             <h2 class="brand-text">SAN FRANCISCO INDIAN MUSIC PROJECT</h2>
         </div>
-        <div class="clock-container">
+        <div class="clock-container" style="display: flex; align-items: center;">
             <span id="current-time">--:-- -- PT</span>
+            <button id="reset-sheet-btn" class="nav-btn button-secondary" title="Change Sheet" style="padding: 6px 12px; font-size: 0.8rem; margin-left: 16px;">
+                Change Sheet
+            </button>
         </div>
     </header>
 
