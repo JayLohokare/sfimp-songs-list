@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const songName = row[2] ? row[2].trim() : '';
             const songNum = row[1] ? row[1].trim() : '';
             
-            if (songName && songName.toLowerCase() !== 'tbd') {
+            if (songNum !== '' || songName !== '') {
                 let participants = [];
                 for (let inst of instrumentKeys) {
                     if (row[inst.index] && row[inst.index].trim() !== '') {
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 songsData.push({
                     timeBlock: currentTimeBlockStr,
                     number: songNum,
-                    title: songName,
+                    title: songName || 'TBD',
                     participants: participants
                 });
             }
