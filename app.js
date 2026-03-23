@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         currentSongTitle.textContent = song.title;
         currentTimeBlock.textContent = timeBlockStr;
-        currentSongIndexBadge.textContent = `Song ${slotSongIndex} / ${totalInSlot} in ${timeBlockStr} slot`;
+        currentSongIndexBadge.innerHTML = `${timeBlockStr} <span style="opacity:0.4; margin:0 6px;">|</span> ${slotSongIndex}/${totalInSlot}`;
         
         participantsList.innerHTML = '';
         song.participants.forEach(p => {
