@@ -21,17 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let songsData = [];
     let currentSongIndex = 0;
 
-    // Check localStorage
-    const savedApiKey = localStorage.getItem('sfimpApiKey');
-    const savedSheetId = localStorage.getItem('sfimpSheetId');
+    // Default Credentials provided by User
+    const DEFAULT_API_KEY = 'AIzaSyBjsGXUIx6AtPhdQZbIgA91caX4hiwvsc0';
+    const DEFAULT_SHEET_ID = '1k4K0GZVevtR5LLULmBZhD9g_nQ0WcB_C-jkaS3Baf0U';
 
-    if (savedApiKey && savedSheetId) {
-        apiKeyInput.value = savedApiKey;
-        sheetIdInput.value = savedSheetId;
-        fetchSheetData(savedApiKey, savedSheetId);
-    } else {
-        modal.classList.add('active');
-    }
+    // Check localStorage or use defaults
+    const savedApiKey = localStorage.getItem('sfimpApiKey') || DEFAULT_API_KEY;
+    const savedSheetId = localStorage.getItem('sfimpSheetId') || DEFAULT_SHEET_ID;
+
+    apiKeyInput.value = savedApiKey;
+    sheetIdInput.value = savedSheetId;
+    
+    // Automatically fetch on load
+    fetchSheetData(savedApiKey, savedSheetId);
 
     saveSetupBtn.addEventListener('click', () => {
         const apiKey = apiKeyInput.value.trim();
