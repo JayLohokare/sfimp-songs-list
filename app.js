@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentSongIndexBadge = document.getElementById('current-song-index');
     const participantsList = document.getElementById('participants-list');
     const nextSongTitle = document.getElementById('next-song-title');
+    const nextSongParticipants = document.getElementById('next-song-participants');
     
     // Buttons
     const prevBtn = document.getElementById('prev-btn');
@@ -161,9 +162,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentSongIndex < songsData.length - 1) {
             const next = songsData[currentSongIndex + 1];
-            nextSongTitle.textContent = next.title + (next.participants.length > 0 && next.participants[0].role === 'Vocals' ? ` (${next.participants[0].name})` : '');
+            nextSongTitle.textContent = next.title;
+            if (next.participants && next.participants.length > 0) {
+                nextSongParticipants.innerHTML = next.participants.map(p => `${p.name} <span style="opacity:0.6;font-size:0.8em">(${p.role})</span>`).join(' &bull; ');
+            } else {
+                nextSongParticipants.innerHTML = '';
+            }
         } else {
             nextSongTitle.textContent = "End of Jam Session!";
+            nextSongParticipants.innerHTML = '';
         }
 
         prevBtn.style.opacity = currentSongIndex === 0 ? "0.3" : "1";
