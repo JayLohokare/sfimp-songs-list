@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buttons
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
+    const prevSlotBtn = document.getElementById('prev-slot-btn');
+    const nextSlotBtn = document.getElementById('next-slot-btn');
 
     let songsData = [];
     let currentSongIndex = 0;
@@ -183,7 +185,63 @@ document.addEventListener('DOMContentLoaded', () => {
         
         nextBtn.style.opacity = currentSongIndex === songsData.length - 1 ? "0.3" : "1";
         nextBtn.style.pointerEvents = currentSongIndex === songsData.length - 1 ? "none" : "auto";
+        
+        const prevSlotIdx = getPrevSlotIndex();
+        const nextSlotIdx = getNextSlotIndex();
+        
+        prevSlotBtn.style.opacity = prevSlotIdx === -1 ? "0.3" : "1";
+        prevSlotBtn.style.pointerEvents = prevSlotIdx === -1 ? "none" : "auto";
+        
+        nextSlotBtn.style.opacity = nextSlotIdx === -1 ? "0.3" : "1";
+        nextSlotBtn.style.pointerEvents = nextSlotIdx === -1 ? "none" : "auto";
     }
+
+    function getPrevSlotIndex() {
+        if (!songsData.length) return -1;
+        const currentSlot = songsData[currentSongIndex].timeBlock;
+        for(let i = currentSongIndex - 1; i >= 0; i--) {
+            if(songsData[i].timeBlock !== currentSlot) {
+                const prevSlotName = songsData[i].timeBlock;
+                let firstOfPrev = i;
+                for(let j=i; j>=0; j--) {
+                    if(songsData[j].timeBlock === prevSlotName) {
+                        firstOfPrev = j;
+                    } else {
+                        break;
+                    }
+                }
+                return firstOfPrev;
+            }
+        }
+        return -1;
+    }
+
+    function getNextSlotIndex() {
+        if (!songsData.length) return -1;
+        const currentSlot = songsData[currentSongIndex].timeBlock;
+        for(let i = currentSongIndex + 1; i < songsData.length; i++) {
+            if(songsData[i].timeBlock !== currentSlot) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    prevSlotBtn.addEventListener('click', () => {
+        const idx = getPrevSlotIndex();
+        if(idx !== -1) {
+            currentSongIndex = idx;
+            renderSong();
+        }
+    });
+
+    nextSlotBtn.addEventListener('click', () => {
+        const idx = getNextSlotIndex();
+        if(idx !== -1) {
+            currentSongIndex = idx;
+            renderSong();
+        }
+    });
 
     prevBtn.addEventListener('click', () => {
         if (currentSongIndex > 0) {
