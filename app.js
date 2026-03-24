@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('setup-modal');
     const sheetIdInput = document.getElementById('sheet-id-input');
+    const apiKeyInput = document.getElementById('api-key-input');
     const saveSetupBtn = document.getElementById('save-setup-btn');
     const setupError = document.getElementById('setup-error');
     const dashboard = document.getElementById('main-dashboard');
@@ -26,17 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const DEFAULT_API_KEY = 'AIzaSyBjsGXUIx6AtPhdQZbIgA91caX4hiwvsc0';
     const savedSheetId = localStorage.getItem('sfimpSheetId');
+    const savedApiKey = localStorage.getItem('sfimpApiKey');
 
     if (savedSheetId) {
         sheetIdInput.value = savedSheetId;
-        fetchSheetData(DEFAULT_API_KEY, savedSheetId);
+        if (savedApiKey) apiKeyInput.value = savedApiKey;
+        fetchSheetData(savedApiKey || DEFAULT_API_KEY, savedSheetId);
     } else {
+        if (savedApiKey) apiKeyInput.value = savedApiKey;
         modal.classList.add('active');
         dashboard.classList.add('is-loading');
     }
 
     saveSetupBtn.addEventListener('click', () => {
         const sheetId = sheetIdInput.value.trim();
+        const apiKey = apiKeyInput.value.trim();
         
         if (!sheetId) {
             setupError.textContent = "Please provide a Sheet ID or URL.";
@@ -48,7 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSetupBtn.textContent = "Loading...";
         
         localStorage.setItem('sfimpSheetId', sheetId);
-        fetchSheetData(DEFAULT_API_KEY, sheetId);
+        if (apiKey) {
+            localStorage.setItem('sfimpApiKey', apiKey);
+        } else {
+            localStorage.removeItem('sfimpApiKey');
+        }
+        
+        fetchSheetData(apiKey || DEFAULT_API_KEY, sheetId);
     });
 
     resetSheetBtn.addEventListener('click', () => {
