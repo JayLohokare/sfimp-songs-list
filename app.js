@@ -108,10 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const headers = rows[0] || [];
         const instrumentKeys = [];
+        const metadataKeys = [];
         for (let col = 3; col < headers.length; col++) {
             const headerName = headers[col] ? headers[col].trim() : '';
             if (headerName) {
-                instrumentKeys.push({ index: col, name: headerName });
+                const lowerName = headerName.toLowerCase();
+                if (lowerName === 'scale' || lowerName.includes('link')) {
+                    metadataKeys.push({ index: col, name: headerName });
+                } else {
+                    instrumentKeys.push({ index: col, name: headerName });
+                }
             }
         }
 
@@ -135,12 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     }
                 }
+
+                let details = [];
+                for (let meta of metadataKeys) {
+                    if (row[meta.index] && row[meta.index].trim() !== '') {
+                        details.push({
+                            label: meta.name,
+                            value: row[meta.index].trim()
+                        });
+                    }
+                }
                 
                 songsData.push({
                     timeBlock: currentTimeBlockStr,
                     number: songNum,
                     title: songName || 'TBD',
-                    participants: participants
+                    participants: participants,
+                    details: details
                 });
             }
         }
@@ -166,6 +183,31 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTimeBlock.textContent = timeBlockStr;
         currentSongIndexBadge.innerHTML = `${timeBlockStr} <span style="opacity:0.4; margin:0 6px;">|</span> ${slotSongIndex}/${totalInSlot}`;
         
+        const detailsContainer = document.getElementById('song-details-container');
+        if (detailsContainer) {
+            detailsContainer.innerHTML = '';
+            if (song.details && song.details.length > 0) {
+                song.details.forEach(detail => {
+                    const detailDiv = document.createElement('div');
+                    detailDiv.className = 'badge badge-light';
+                    detailDiv.style.textTransform = 'none';
+                    detailDiv.style.fontSize = '0.9rem';
+                    
+                    let formattedValue = detail.value;
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    if (urlRegex.test(formattedValue)) {
+                        formattedValue = formattedValue.replace(urlRegex, '<a href="$1" target="_blank" title="Link" style="color: inherit; text-decoration: none; margin-left: 4px;">🔗</a>');
+                    }
+                    
+                    detailDiv.innerHTML = `<span style="font-weight: 800; color: var(--accent-orange); margin-right: 6px;">${detail.label.toUpperCase()}</span> ${formattedValue}`;
+                    detailsContainer.appendChild(detailDiv);
+                });
+                detailsContainer.style.display = 'flex';
+            } else {
+                detailsContainer.style.display = 'none';
+            }
+        }
+
         participantsList.innerHTML = '';
         song.participants.forEach(p => {
             const div = document.createElement('div');
