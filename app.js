@@ -104,16 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
         songsData = [];
         let currentTimeBlockStr = "";
 
-        const instrumentKeys = [
-            { index: 4, name: 'Vocals' },
-            { index: 5, name: 'Drums' },
-            { index: 6, name: 'Keys / Synth' },
-            { index: 7, name: 'Guitar 1' },
-            { index: 8, name: 'Guitar 2' },
-            { index: 9, name: 'Acoustic Guitar' },
-            { index: 10, name: 'Bass' },
-            { index: 11, name: 'Others' }
-        ];
+        if (!rows || rows.length === 0) return;
+
+        const headers = rows[0] || [];
+        const instrumentKeys = [];
+        for (let col = 3; col < headers.length; col++) {
+            const headerName = headers[col] ? headers[col].trim() : '';
+            if (headerName) {
+                instrumentKeys.push({ index: col, name: headerName });
+            }
+        }
 
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
@@ -170,9 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
         song.participants.forEach(p => {
             const div = document.createElement('div');
             div.className = 'participant-tag';
+            
+            let formattedName = p.name;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            if (urlRegex.test(formattedName)) {
+                formattedName = formattedName.replace(urlRegex, '<a href="$1" target="_blank" title="Link" style="color: inherit; text-decoration: none; margin-left: 4px;">🔗</a>');
+            }
+
             div.innerHTML = `
                 <span class="p-role">${p.role}</span>
-                <span class="p-name">${p.name}</span>
+                <span class="p-name">${formattedName}</span>
             `;
             participantsList.appendChild(div);
         });
@@ -181,7 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const next = songsData[currentSongIndex + 1];
             nextSongTitle.textContent = next.title;
             if (next.participants && next.participants.length > 0) {
-                nextSongParticipants.innerHTML = next.participants.map(p => `<div class="participant-pill"><span class="pill-role">${p.role}</span> ${p.name}</div>`).join('');
+                nextSongParticipants.innerHTML = next.participants.map(p => {
+                    let formattedName = p.name;
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    if (urlRegex.test(formattedName)) {
+                        formattedName = formattedName.replace(urlRegex, '<a href="$1" target="_blank" title="Link" style="color: inherit; text-decoration: none; margin-left: 4px;">🔗</a>');
+                    }
+                    return `<div class="participant-pill"><span class="pill-role">${p.role}</span> ${formattedName}</div>`;
+                }).join('');
             } else {
                 nextSongParticipants.innerHTML = '';
             }
