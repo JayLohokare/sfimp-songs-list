@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let subheaderText = [];
         let linksHtml = '';
         let otherMetaHtml = [];
+        let firstEmbedUrl = null;
 
         if (song.details && song.details.length > 0) {
             song.details.forEach(detail => {
@@ -202,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const urls = val.match(urlRegex);
                     if (urls) {
                         urls.forEach((url, idx) => {
+                            if (!firstEmbedUrl) firstEmbedUrl = url;
                             linksHtml += `<a href="${url}" target="_blank" class="nav-btn button-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-color: var(--border-color); color: var(--text-primary); margin-top:4px;">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                                 Reference Link
@@ -245,6 +247,36 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 otherMetaContainer.style.display = 'none';
             }
+        }
+
+        const mediaContainer = document.getElementById('song-media-container');
+        const mediaWrapper = document.getElementById('media-embed-wrapper');
+        const layoutContainer = document.querySelector('.current-song-layout');
+        
+        if (firstEmbedUrl && mediaContainer && mediaWrapper && layoutContainer) {
+            let embedSrc = firstEmbedUrl;
+            
+            if (embedSrc.includes('youtube.com/watch')) {
+                try {
+                    const urlParams = new URLSearchParams(embedSrc.split('?')[1]);
+                    if (urlParams.has('v')) {
+                        embedSrc = `https://www.youtube.com/embed/${urlParams.get('v')}`;
+                    }
+                } catch(e) {}
+            } else if (embedSrc.includes('youtu.be/')) {
+                const videoId = embedSrc.split('youtu.be/')[1].split('?')[0];
+                embedSrc = `https://www.youtube.com/embed/${videoId}`;
+            } else if (embedSrc.includes('drive.google.com/file/d/')) {
+                embedSrc = embedSrc.replace('/view', '/preview').split('?')[0] + '/preview';
+            }
+            
+            mediaWrapper.innerHTML = `<iframe src="${embedSrc}" allowfullscreen="true" allow="autoplay; fullscreen"></iframe>`;
+            mediaContainer.style.display = 'flex';
+            layoutContainer.classList.add('has-media');
+        } else if (mediaContainer && layoutContainer) {
+            mediaContainer.style.display = 'none';
+            mediaWrapper.innerHTML = '';
+            layoutContainer.classList.remove('has-media');
         }
 
         participantsList.innerHTML = '';
