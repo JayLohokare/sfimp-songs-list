@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let linksHtml = '';
         let otherMetaHtml = [];
         let firstEmbedUrl = null;
+        let firstEmbedUrlRaw = null;
 
         if (song.details && song.details.length > 0) {
             song.details.forEach(detail => {
@@ -203,7 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const urls = val.match(urlRegex);
                     if (urls) {
                         urls.forEach((url, idx) => {
-                            if (!firstEmbedUrl) firstEmbedUrl = url;
+                            if (!firstEmbedUrl) {
+                                firstEmbedUrl = url;
+                                firstEmbedUrlRaw = url;
+                            }
                             linksHtml += `<a href="${url}" target="_blank" class="nav-btn button-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-color: var(--border-color); color: var(--text-primary); margin-top:4px;">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                                 Reference Link
@@ -251,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const splitView = document.getElementById('app-split-view');
         const mediaIframe = document.getElementById('fullscreen-media-iframe');
+        const externalLinkBtn = document.getElementById('app-right-external-link');
         
         if (firstEmbedUrl && splitView && mediaIframe) {
             let embedSrc = firstEmbedUrl;
@@ -270,6 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             mediaIframe.src = embedSrc;
+            if (externalLinkBtn && firstEmbedUrlRaw) {
+                externalLinkBtn.href = firstEmbedUrlRaw;
+            }
             splitView.classList.add('is-split');
             document.body.classList.add('split-active');
         } else if (splitView) {
