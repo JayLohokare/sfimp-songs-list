@@ -276,13 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (embedSrc.includes('drive.google.com/file/d/')) {
                 embedSrc = embedSrc.replace('/view', '/preview').split('?')[0] + '/preview';
             } else if (embedSrc.includes('ultimate-guitar.com')) {
-                isBlocked = true;
+                // Extension installed - attempt to render
                 if (fallbackTitle) fallbackTitle.textContent = "Ultimate Guitar Tab";
             } else if (embedSrc.includes('songsterr.com')) {
-                isBlocked = true;
                 if (fallbackTitle) fallbackTitle.textContent = "Songsterr Tab";
             } else if (embedSrc.includes('docs.google.com') && !embedSrc.includes('/pub')) {
-                isBlocked = true;
                 if (fallbackTitle) fallbackTitle.textContent = "Google Document";
             } else {
                 if (fallbackTitle) fallbackTitle.textContent = "External Reference";
