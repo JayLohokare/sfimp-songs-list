@@ -256,9 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const splitView = document.getElementById('app-split-view');
         const mediaIframe = document.getElementById('fullscreen-media-iframe');
         const externalLinkBtn = document.getElementById('app-right-external-link');
+        const fallbackMsg = document.getElementById('media-fallback-message');
+        const fallbackTitle = document.getElementById('fallback-title');
         
         if (firstEmbedUrl && splitView && mediaIframe) {
             let embedSrc = firstEmbedUrl;
+            let isBlocked = false;
             
             if (embedSrc.includes('youtube.com/watch')) {
                 try {
@@ -272,16 +275,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 embedSrc = `https://www.youtube.com/embed/${videoId}`;
             } else if (embedSrc.includes('drive.google.com/file/d/')) {
                 embedSrc = embedSrc.replace('/view', '/preview').split('?')[0] + '/preview';
+            } else if (embedSrc.includes('ultimate-guitar.com')) {
+                isBlocked = true;
+                if (fallbackTitle) fallbackTitle.textContent = "Ultimate Guitar Tab";
+            } else if (embedSrc.includes('songsterr.com')) {
+                isBlocked = true;
+                if (fallbackTitle) fallbackTitle.textContent = "Songsterr Tab";
+            } else if (embedSrc.includes('docs.google.com') && !embedSrc.includes('/pub')) {
+                isBlocked = true;
+                if (fallbackTitle) fallbackTitle.textContent = "Google Document";
+            } else {
+                if (fallbackTitle) fallbackTitle.textContent = "External Reference";
             }
             
-            mediaIframe.src = embedSrc;
+            if (isBlocked && fallbackMsg) {
+                mediaIframe.style.display = 'none';
+                mediaIframe.src = '';
+                fallbackMsg.style.display = 'flex';
+            } else {
+                mediaIframe.style.display = 'block';
+                mediaIframe.src = embedSrc;
+                if (fallbackMsg) fallbackMsg.style.display = 'none';
+            }
+            
             if (externalLinkBtn && firstEmbedUrlRaw) {
                 externalLinkBtn.href = firstEmbedUrlRaw;
             }
+            
             splitView.classList.add('is-split');
             document.body.classList.add('split-active');
         } else if (splitView) {
-            if (mediaIframe) mediaIframe.src = '';
+            if (mediaIframe) {
+                mediaIframe.src = '';
+                mediaIframe.style.display = 'none';
+            }
+            if (fallbackMsg) fallbackMsg.style.display = 'none';
             splitView.classList.remove('is-split');
             document.body.classList.remove('split-active');
         }
