@@ -20,6 +20,8 @@
         </div>
     </div>
 
+    <div class="app-split-view" id="app-split-view">
+    <div class="app-left">
     <header class="top-bar">
         <div class="logo-container">
             <img src="./logo.png?v=3" alt="SF Indian Music Project" style="height: 75px; width: auto; object-fit: contain; transform: scale(1.15); transform-origin: left center;">
@@ -33,11 +35,8 @@
     </header>
 
     <main class="dashboard is-loading" id="main-dashboard">
-        <!-- Main Current Song Layout -->
-        <div class="current-song-layout">
-            <!-- Left Side -->
-            <div class="current-song-card solid-card card-accent">
-                <div class="card-header">
+        <div class="current-song-card solid-card card-accent">
+            <div class="card-header">
                 <span class="badge badge-orange">LIVE JAM</span>
                 <span id="current-song-index" class="badge badge-light">#-</span>
             </div>
@@ -57,17 +56,6 @@
             <p class="section-label">Musicians</p>
             <div class="participants-grid" id="participants-list">
                 <!-- Javascript will inject participants here -->
-            </div>
-            </div>
-
-            <!-- Media / Iframe rendering on the right -->
-            <div class="song-media-card solid-card" id="song-media-container" style="display: none;">
-                <div class="card-header" style="margin-bottom: 16px;">
-                    <span class="badge badge-light">REFERENCE MEDIA</span>
-                </div>
-                <div id="media-embed-wrapper" style="width: 100%; flex: 1; min-height: 400px; display: flex; flex-direction: column;">
-                    <!-- Javascript will inject iframe here -->
-                </div>
             </div>
         </div>
 
@@ -98,6 +86,13 @@
             </div>
         </div>
     </main>
-    <script src="./app.js?v=5"></script>
+    </div> <!-- /.app-left -->
+    
+    <div class="app-right" id="app-right-panel">
+        <iframe id="fullscreen-media-iframe" src="" allowfullscreen="true" allow="autoplay; fullscreen"></iframe>
+    </div>
+    </div> <!-- /.app-split-view -->
+
+    <script src="./app.js?v=6"></script>
 </body>
 </html>

@@ -249,11 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const mediaContainer = document.getElementById('song-media-container');
-        const mediaWrapper = document.getElementById('media-embed-wrapper');
-        const layoutContainer = document.querySelector('.current-song-layout');
+        const splitView = document.getElementById('app-split-view');
+        const mediaIframe = document.getElementById('fullscreen-media-iframe');
         
-        if (firstEmbedUrl && mediaContainer && mediaWrapper && layoutContainer) {
+        if (firstEmbedUrl && splitView && mediaIframe) {
             let embedSrc = firstEmbedUrl;
             
             if (embedSrc.includes('youtube.com/watch')) {
@@ -270,13 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 embedSrc = embedSrc.replace('/view', '/preview').split('?')[0] + '/preview';
             }
             
-            mediaWrapper.innerHTML = `<iframe src="${embedSrc}" allowfullscreen="true" allow="autoplay; fullscreen"></iframe>`;
-            mediaContainer.style.display = 'flex';
-            layoutContainer.classList.add('has-media');
-        } else if (mediaContainer && layoutContainer) {
-            mediaContainer.style.display = 'none';
-            mediaWrapper.innerHTML = '';
-            layoutContainer.classList.remove('has-media');
+            mediaIframe.src = embedSrc;
+            splitView.classList.add('is-split');
+            document.body.classList.add('split-active');
+        } else if (splitView) {
+            if (mediaIframe) mediaIframe.src = '';
+            splitView.classList.remove('is-split');
+            document.body.classList.remove('split-active');
         }
 
         participantsList.innerHTML = '';
