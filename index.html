@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFIMP Jam Dashboard</title>
     <!-- Use relative paths for GitHub Pages -->
-    <link rel="stylesheet" href="./style.css?v=3">
+    <link rel="stylesheet" href="./style.css?v=4">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -40,13 +40,16 @@
                 <span id="current-song-index" class="badge badge-light">#-</span>
             </div>
             
-            <h1 id="current-song-title">Loading...</h1>
-            <div class="song-meta">
-                <span class="meta-icon">📍</span> <span id="current-time-block">--:-- PT</span>
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+                <h1 id="current-song-title" style="margin-bottom: 0;">Loading...</h1>
+                <div id="song-links-container" style="display: none; gap: 8px;"></div>
             </div>
             
-            <div class="song-details" id="song-details-container" style="display: none; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
-                <!-- Javascript will inject scale/links here -->
+            <p id="song-subheader" style="font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 24px; font-weight: 500; display: none;"></p>
+            
+            <div class="song-meta" style="margin-bottom: 32px;">
+                <span class="meta-icon">📍</span> <span id="current-time-block">--:-- PT</span>
+                <span id="other-meta-container" style="margin-left: 16px; border-left: 2px solid var(--border-color); padding-left: 16px; display: none;"></span>
             </div>
             
             <p class="section-label">Musicians</p>
@@ -82,6 +85,6 @@
             </div>
         </div>
     </main>
-    <script src="./app.js?v=3"></script>
+    <script src="./app.js?v=4"></script>
 </body>
 </html>

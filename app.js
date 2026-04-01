@@ -184,28 +184,66 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTimeBlock.textContent = timeBlockStr;
         currentSongIndexBadge.innerHTML = `${timeBlockStr} <span style="opacity:0.4; margin:0 6px;">|</span> ${slotSongIndex}/${totalInSlot}`;
         
-        const detailsContainer = document.getElementById('song-details-container');
-        if (detailsContainer) {
-            detailsContainer.innerHTML = '';
-            if (song.details && song.details.length > 0) {
-                song.details.forEach(detail => {
-                    const detailDiv = document.createElement('div');
-                    detailDiv.className = 'badge badge-light';
-                    detailDiv.style.textTransform = 'none';
-                    detailDiv.style.fontSize = '0.9rem';
-                    
-                    let formattedValue = detail.value;
-                    const urlRegex = /(https?:\/\/[^\s]+)/g;
-                    if (urlRegex.test(formattedValue)) {
-                        formattedValue = formattedValue.replace(urlRegex, '<a href="$1" target="_blank" title="Link" style="color: inherit; text-decoration: none; margin-left: 4px;">🔗</a>');
+        const linksContainer = document.getElementById('song-links-container');
+        const subheaderElem = document.getElementById('song-subheader');
+        const otherMetaContainer = document.getElementById('other-meta-container');
+
+        let subheaderText = [];
+        let linksHtml = '';
+        let otherMetaHtml = [];
+
+        if (song.details && song.details.length > 0) {
+            song.details.forEach(detail => {
+                const lowerLabel = detail.label.toLowerCase();
+                let val = detail.value;
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+                if (lowerLabel.includes('link')) {
+                    const urls = val.match(urlRegex);
+                    if (urls) {
+                        urls.forEach((url, idx) => {
+                            linksHtml += `<a href="${url}" target="_blank" class="nav-btn button-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-color: var(--border-color); color: var(--text-primary); margin-top:4px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                Reference Link
+                            </a>`;
+                        });
+                    } else if (val.trim()) {
+                         subheaderText.push(val);
                     }
-                    
-                    detailDiv.innerHTML = `<span style="font-weight: 800; color: var(--accent-orange); margin-right: 6px;">${detail.label.toUpperCase()}</span> ${formattedValue}`;
-                    detailsContainer.appendChild(detailDiv);
-                });
-                detailsContainer.style.display = 'flex';
+                } else if (lowerLabel.includes('detail') || lowerLabel.includes('refer') || lowerLabel.includes('note')) {
+                     if (urlRegex.test(val)) {
+                         val = val.replace(urlRegex, '<a href="$1" target="_blank" style="color: var(--accent-orange); text-decoration: underline;">URL</a>');
+                     }
+                     subheaderText.push(val);
+                } else {
+                     if (urlRegex.test(val)) {
+                         val = val.replace(urlRegex, '<a href="$1" target="_blank" style="color: var(--accent-orange); text-decoration: underline;">URL</a>');
+                     }
+                     otherMetaHtml.push(`<span style="color: var(--text-secondary); font-weight: 800; font-family: Montserrat, sans-serif; font-size: 0.75rem; text-transform: uppercase;">${detail.label}</span> <span style="font-weight: 600; color: var(--text-primary);">${val}</span>`);
+                }
+            });
+        }
+
+        if (linksContainer) {
+            linksContainer.innerHTML = linksHtml;
+            linksContainer.style.display = linksHtml ? 'flex' : 'none';
+        }
+        
+        if (subheaderElem) {
+            if (subheaderText.length > 0) {
+                subheaderElem.innerHTML = subheaderText.join(' <span style="color:var(--border-color); margin:0 8px;">|</span> ');
+                subheaderElem.style.display = 'block';
             } else {
-                detailsContainer.style.display = 'none';
+                subheaderElem.style.display = 'none';
+            }
+        }
+        
+        if (otherMetaContainer) {
+            if (otherMetaHtml.length > 0) {
+                otherMetaContainer.innerHTML = otherMetaHtml.join(' <span style="color:var(--border-color); margin:0 8px;">|</span> ');
+                otherMetaContainer.style.display = 'inline-block';
+            } else {
+                otherMetaContainer.style.display = 'none';
             }
         }
 
