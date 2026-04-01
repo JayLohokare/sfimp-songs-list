@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const headerName = headers[col] ? headers[col].trim() : '';
             if (headerName) {
                 const lowerName = headerName.toLowerCase();
-                if (lowerName === 'scale' || lowerName.includes('link')) {
+                const isMetadata = ['scale', 'link', 'detail', 'refer', 'note'].some(keyword => lowerName.includes(keyword));
+                if (isMetadata) {
                     metadataKeys.push({ index: col, name: headerName });
                 } else {
                     instrumentKeys.push({ index: col, name: headerName });
