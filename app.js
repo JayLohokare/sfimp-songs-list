@@ -3,9 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const sheetIdInput = document.getElementById('sheet-id-input');
     const apiKeyInput = document.getElementById('api-key-input');
     const saveSetupBtn = document.getElementById('save-setup-btn');
+    const closeSetupBtn = document.getElementById('close-setup-btn');
     const setupError = document.getElementById('setup-error');
     const dashboard = document.getElementById('main-dashboard');
-    const resetSheetBtn = document.getElementById('reset-sheet-btn');
+    const settingsBtn = document.getElementById('settings-btn');
+    const splitScreenCheckbox = document.getElementById('split-screen-checkbox');
+    const splitToggleContainer = document.getElementById('split-toggle-container');
     
     // UI Elements
     const timeDisplay = document.getElementById('current-time');
@@ -21,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('next-btn');
     const prevSlotBtn = document.getElementById('prev-slot-btn');
     const nextSlotBtn = document.getElementById('next-slot-btn');
-    const toggleSplitBtn = document.getElementById('toggle-split-btn');
-
     let songsData = [];
     let currentSongIndex = 0;
     let userSplitScreenPref = null;
@@ -32,19 +33,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.innerWidth > 992;
     }
 
-    if (toggleSplitBtn) {
-        toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (isSplitScreenEnabled() ? 'ON' : 'OFF');
+    if (splitScreenCheckbox) {
+        splitScreenCheckbox.checked = isSplitScreenEnabled();
         
-        toggleSplitBtn.addEventListener('click', () => {
-            userSplitScreenPref = !isSplitScreenEnabled();
-            toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (userSplitScreenPref ? 'ON' : 'OFF');
+        const applySplitPref = () => {
+            userSplitScreenPref = splitScreenCheckbox.checked;
             if (songsData && songsData.length > 0) renderSong();
-        });
+        };
+
+        splitScreenCheckbox.addEventListener('change', applySplitPref);
+
+        // Allow clicking the container to toggle checkbox
+        if (splitToggleContainer) {
+            splitToggleContainer.addEventListener('click', (e) => {
+                if (e.target !== splitScreenCheckbox) {
+                    splitScreenCheckbox.checked = !splitScreenCheckbox.checked;
+                    applySplitPref();
+                }
+            });
+        }
         
         window.addEventListener('resize', () => {
             if (userSplitScreenPref === null) {
-                const currentPref = isSplitScreenEnabled();
-                toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (currentPref ? 'ON' : 'OFF');
+                splitScreenCheckbox.checked = isSplitScreenEnabled();
                 if (songsData && songsData.length > 0) renderSong();
             }
         });
@@ -65,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     saveSetupBtn.addEventListener('click', () => {
-        const sheetId = sheetIdInput.value.trim();
+        const sheetIdRaw = sheetIdInput.value.trim();
         const apiKey = apiKeyInput.value.trim();
         
-        if (!sheetId) {
+        if (!sheetIdRaw) {
             setupError.textContent = "Please provide a Sheet ID or URL.";
             setupError.style.display = "block";
             return;
@@ -77,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setupError.style.display = "none";
         saveSetupBtn.textContent = "Loading...";
         
+        const sheetId = cleanSheetId(sheetIdRaw);
+        
         localStorage.setItem('sfimpSheetId', sheetId);
         if (apiKey) {
             localStorage.setItem('sfimpApiKey', apiKey);
@@ -84,13 +97,28 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('sfimpApiKey');
         }
         
+        if (splitScreenCheckbox) {
+            userSplitScreenPref = splitScreenCheckbox.checked;
+        }
+        modal.classList.remove('active');
+        
         fetchSheetData(apiKey || DEFAULT_API_KEY, sheetId);
     });
 
-    resetSheetBtn.addEventListener('click', () => {
-        localStorage.removeItem('sfimpSheetId');
-        location.reload();
-    });
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            if (songsData && songsData.length > 0) {
+                if (closeSetupBtn) closeSetupBtn.style.display = 'block';
+            }
+        });
+    }
+
+    if (closeSetupBtn) {
+        closeSetupBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+    }
 
     function cleanSheetId(input) {
         if (input.includes('/d/')) {
