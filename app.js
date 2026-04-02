@@ -21,9 +21,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('next-btn');
     const prevSlotBtn = document.getElementById('prev-slot-btn');
     const nextSlotBtn = document.getElementById('next-slot-btn');
+    const toggleSplitBtn = document.getElementById('toggle-split-btn');
 
     let songsData = [];
     let currentSongIndex = 0;
+    let userSplitScreenPref = null;
+
+    function isSplitScreenEnabled() {
+        if (userSplitScreenPref !== null) return userSplitScreenPref;
+        return window.innerWidth > 992;
+    }
+
+    if (toggleSplitBtn) {
+        toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (isSplitScreenEnabled() ? 'ON' : 'OFF');
+        
+        toggleSplitBtn.addEventListener('click', () => {
+            userSplitScreenPref = !isSplitScreenEnabled();
+            toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (userSplitScreenPref ? 'ON' : 'OFF');
+            if (songsData && songsData.length > 0) renderSong();
+        });
+        
+        window.addEventListener('resize', () => {
+            if (userSplitScreenPref === null) {
+                const currentPref = isSplitScreenEnabled();
+                toggleSplitBtn.textContent = 'SPLIT VIEW: ' + (currentPref ? 'ON' : 'OFF');
+                if (songsData && songsData.length > 0) renderSong();
+            }
+        });
+    }
 
     const DEFAULT_API_KEY = 'AIzaSyBjsGXUIx6AtPhdQZbIgA91caX4hiwvsc0';
     const savedSheetId = localStorage.getItem('sfimpSheetId');
@@ -259,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fallbackMsg = document.getElementById('media-fallback-message');
         const fallbackTitle = document.getElementById('fallback-title');
         
-        if (firstEmbedUrl && splitView && mediaIframe) {
+        if (firstEmbedUrl && splitView && mediaIframe && isSplitScreenEnabled()) {
             let embedSrc = firstEmbedUrl;
             let isBlocked = false;
             
