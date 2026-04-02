@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFIMP Jam Dashboard</title>
     <!-- Use relative paths for GitHub Pages -->
-    <link rel="stylesheet" href="./style.css?v=12">
+    <link rel="stylesheet" href="./style.css?v=13">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -34,9 +34,12 @@
         <div class="logo-container">
             <img src="./logo.png?v=3" alt="SF Indian Music Project" style="height: 75px; width: auto; object-fit: contain; transform: scale(1.15); transform-origin: left center;">
         </div>
-        <div class="clock-container" style="display: flex; align-items: center;">
-            <span id="current-time">--:-- -- PT</span>
-            <button id="reset-sheet-btn" class="nav-btn button-secondary" title="Change Sheet" style="padding: 6px 12px; font-size: 0.8rem; margin-left: 16px;">
+        <div class="clock-container" style="display: flex; align-items: center; gap: 16px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <span id="current-time">--:-- -- PT</span>
+                <button id="toggle-split-btn" class="nav-btn button-secondary" style="font-size: 0.65rem; padding: 4px 8px; height: auto; border-radius: 4px; letter-spacing: 0.5px;">SPLIT VIEW: ON</button>
+            </div>
+            <button id="reset-sheet-btn" class="nav-btn button-secondary" title="Change Sheet" style="padding: 6px 12px; font-size: 0.8rem;">
                 Change Sheet
             </button>
         </div>
@@ -116,6 +119,6 @@
     </div>
     </div> <!-- /.app-split-view -->
 
-    <script src="./app.js?v=11"></script>
+    <script src="./app.js?v=13"></script>
 </body>
 </html>
