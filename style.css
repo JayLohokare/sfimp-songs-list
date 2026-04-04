@@ -101,6 +101,37 @@ h1, h2, h3, .brand-text {
     color: var(--text-secondary);
 }
 
+/* Timer Styles */
+.timer-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.timer-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-orange);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+    min-width: 60px;
+    text-align: center;
+}
+.timer-number:hover {
+    background: var(--accent-orange-light);
+}
+.timer-number.editing {
+    background: var(--bg-alt);
+    border: 2px solid var(--accent-orange);
+    outline: none;
+}
+.timer-controls {
+    display: flex;
+    gap: 8px;
+}
+
 /* Dashboard Layout */
 .dashboard {
     flex: 1;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFIMP Jam Dashboard</title>
     <!-- Use relative paths for GitHub Pages -->
-    <link rel="stylesheet" href="./style.css?v=14">
+    <link rel="stylesheet" href="./style.css?v=15">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -50,11 +50,22 @@
         <div class="logo-container">
             <img src="./logo.png?v=3" alt="SF Indian Music Project" style="height: 75px; width: auto; object-fit: contain; transform: scale(1.15); transform-origin: left center;">
         </div>
-        <div class="clock-container" style="display: flex; align-items: center; gap: 16px;">
-            <span id="current-time">--:-- -- PT</span>
-            <button id="settings-btn" class="nav-btn button-secondary" title="Settings" style="padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            </button>
+        <div class="clock-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span id="current-time">--:-- -- PT</span>
+                <button id="settings-btn" class="nav-btn button-secondary" title="Settings" style="padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+            </div>
+            <!-- Countdown Timer -->
+            <div class="timer-container">
+                <span id="timer-display" class="timer-number" title="Click to edit">5:00</span>
+                <div class="timer-controls">
+                    <button id="timer-start" class="nav-btn button-primary" style="padding: 6px 12px; font-size: 0.8rem;">Start</button>
+                    <button id="timer-pause" class="nav-btn button-secondary" style="padding: 6px 12px; font-size: 0.8rem; display: none;">Pause</button>
+                    <button id="timer-reset" class="nav-btn button-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Reset</button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -132,6 +143,6 @@
     </div>
     </div> <!-- /.app-split-view -->
 
-    <script src="./app.js?v=14"></script>
+    <script src="./app.js?v=15"></script>
 </body>
 </html>

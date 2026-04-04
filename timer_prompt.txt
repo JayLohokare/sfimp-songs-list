@@ -1,0 +1,18 @@
+Add a countdown timer to this web app:
+
+1. Add a timer display UNDER the current time (the `<span id="current-time">` element in the header). The timer should show a countdown in MM:SS format, default starting at 5:00.
+
+2. Add three control buttons below the timer: Start, Pause, Reset. Style them consistently with the existing `.nav-btn` and `.button-primary`/`.button-secondary` classes.
+
+3. Make the timer number interactive:
+   - Clicking on the countdown number pauses the timer and makes it editable
+   - User can type a new time (in seconds or MM:SS format)
+   - Pressing Enter or clicking away resumes the countdown from the new time
+
+4. Use localStorage to persist the timer state across page reloads.
+
+5. Match the existing UI style - look at style.css for the design system.
+
+Edit index.html to add the HTML structure, style.css for styling, and app.js for the timer logic. Use the same CSS variables and patterns already in use.
+
+When done, commit all changes with message: "Add countdown timer with controls"

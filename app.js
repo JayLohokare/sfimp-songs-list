@@ -493,4 +493,140 @@ document.addEventListener('DOMContentLoaded', () => {
     
     updateTime();
     setInterval(updateTime, 60000);
+
+    // =====================
+    // COUNTDOWN TIMER
+    // =====================
+    const timerDisplay = document.getElementById('timer-display');
+    const timerStartBtn = document.getElementById('timer-start');
+    const timerPauseBtn = document.getElementById('timer-pause');
+    const timerResetBtn = document.getElementById('timer-reset');
+    
+    let timerSeconds = parseInt(localStorage.getItem('sfimpTimerSeconds')) || 300; // Default 5:00
+    let timerInterval = null;
+    let timerRunning = localStorage.getItem('sfimpTimerRunning') === 'true';
+    let timerEndTime = parseInt(localStorage.getItem('sfimpTimerEndTime')) || 0;
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function saveTimerState() {
+        localStorage.setItem('sfimpTimerSeconds', timerSeconds);
+        localStorage.setItem('sfimpTimerRunning', timerRunning);
+        if (timerRunning && timerEndTime) {
+            localStorage.setItem('sfimpTimerEndTime', timerEndTime);
+        } else {
+            localStorage.removeItem('sfimpTimerEndTime');
+        }
+    }
+
+    function updateTimerDisplay() {
+        timerDisplay.textContent = formatTime(timerSeconds);
+    }
+
+    function tick() {
+        if (timerRunning && timerEndTime) {
+            const now = Date.now();
+            timerSeconds = Math.max(0, Math.ceil((timerEndTime - now) / 1000));
+            
+            if (timerSeconds <= 0) {
+                timerSeconds = 0;
+                pauseTimer();
+                // Optional: alert or visual feedback when timer hits zero
+            }
+        }
+        updateTimerDisplay();
+    }
+
+    function startTimer() {
+        if (timerRunning) return;
+        
+        timerRunning = true;
+        timerEndTime = Date.now() + (timerSeconds * 1000);
+        timerStartBtn.style.display = 'none';
+        timerPauseBtn.style.display = 'inline-flex';
+        
+        timerInterval = setInterval(tick, 100);
+        saveTimerState();
+    }
+
+    function pauseTimer() {
+        if (!timerRunning) return;
+        
+        timerRunning = false;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerStartBtn.style.display = 'inline-flex';
+        timerPauseBtn.style.display = 'none';
+        saveTimerState();
+    }
+
+    function resetTimer() {
+        pauseTimer();
+        timerSeconds = 300; // Reset to 5:00
+        updateTimerDisplay();
+        saveTimerState();
+    }
+
+    // Make timer number clickable to edit
+    timerDisplay.addEventListener('click', () => {
+        pauseTimer();
+        const currentVal = timerSeconds;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = formatTime(timerSeconds);
+        input.className = 'timer-number editing';
+        input.style.cssText = 'width: 80px; font-size: 1.5rem; font-family: Montserrat, sans-serif; font-weight: 800; text-align: center; border: 2px solid var(--accent-orange); border-radius: 4px; background: var(--bg-alt); color: var(--text-primary);';
+        
+        timerDisplay.replaceWith(input);
+        input.focus();
+        input.select();
+
+        function finishEdit() {
+            let newVal = input.value.trim();
+            // Parse MM:SS or just seconds
+            if (newVal.includes(':')) {
+                const parts = newVal.split(':');
+                const mins = parseInt(parts[0]) || 0;
+                const secs = parseInt(parts[1]) || 0;
+                timerSeconds = Math.max(0, mins * 60 + secs);
+            } else {
+                timerSeconds = Math.max(0, parseInt(newVal) || 0);
+            }
+            timerDisplay.textContent = formatTime(timerSeconds);
+            input.replaceWith(timerDisplay);
+            saveTimerState();
+        }
+
+        input.addEventListener('blur', finishEdit);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                input.blur();
+            } else if (e.key === 'Escape') {
+                timerSeconds = currentVal;
+                input.replaceWith(timerDisplay);
+            }
+        });
+    });
+
+    timerStartBtn.addEventListener('click', startTimer);
+    timerPauseBtn.addEventListener('click', pauseTimer);
+    timerResetBtn.addEventListener('click', resetTimer);
+
+    // Resume timer if it was running before page reload
+    if (timerRunning && timerEndTime > Date.now()) {
+        timerStartBtn.style.display = 'none';
+        timerPauseBtn.style.display = 'inline-flex';
+        timerInterval = setInterval(tick, 100);
+        tick();
+    } else {
+        // Clear stale end time
+        localStorage.removeItem('sfimpTimerEndTime');
+        timerRunning = false;
+    }
+
+    updateTimerDisplay();
 });
